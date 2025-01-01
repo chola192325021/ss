@@ -186,3 +186,44 @@ e2.name, e2.salary);
  fclose(file);
  return 0;
 }
+
+
+
+#include<stdio.h>
+int main() {
+    int arr[] = {4, 1, 2, 4, 5};
+    int frames = 4;
+    int pagefaults = 0, pagehits = 0;
+    int pages = sizeof arr / sizeof arr[0];
+    int temp[frames], i, j;
+
+    // Initialize all frames to -1 (indicating empty frames)
+    for (i = 0; i < frames; i++) {
+        temp[i] = -1;
+    }
+
+    // Process each page in the input array
+    for (i = 0; i < pages; i++) {
+        int pagefound = 0; // Flag to check if the page is already in memory
+
+        // Check if the page is already in the frames (page hit)
+        for (j = 0; j < frames; j++) {
+            if (temp[j] == arr[i]) { // Page found in one of the frames
+                pagefound = 1;
+                pagehits++; // Increment page hits
+                break;
+            }
+        }
+
+        // If the page is not found (page fault)
+        if (!pagefound) {
+            temp[pagefaults % frames] = arr[i]; // Replace the oldest page using FIFO
+            pagefaults++; // Increment page faults
+        }
+    }
+
+    // Print results
+    printf("Total Page Faults: %d\n", pagefaults);
+    printf("Total Page Hits: %d\n", pagehits);
+    return 0;
+}
