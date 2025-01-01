@@ -164,3 +164,25 @@ index_block[i].block_number, index_block[i].data);
  }
  return 0;
 }
+
+
+
+#include <stdio.h>
+typedef struct {
+ int id;
+ char name[50];
+ float salary;
+} Employee;
+int main() {
+ FILE *file = fopen("employees.dat", "w+");
+ Employee e1 = {1, "John Doe", 50000};
+ fwrite(&e1, sizeof(Employee), 1, file);
+ fseek(file, 0, SEEK_SET);
+
+ Employee e2;
+ fread(&e2, sizeof(Employee), 1, file);
+ printf("Employee ID: %d, Name: %s, Salary: %.2f\n", e2.id,
+e2.name, e2.salary);
+ fclose(file);
+ return 0;
+}
