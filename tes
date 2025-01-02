@@ -284,3 +284,40 @@ int main() {
 
     return 0;
 }
+
+
+
+
+
+#include <stdio.h>
+#define MAX 100
+
+void allocate(int blocks[], int m, int processes[], int n, char *strategy) {
+    int allocation[MAX] = {-1}, i, j;
+    for (i = 0; i < n; i++) {
+        int idx = -1;
+        for (j = 0; j < m; j++) {
+            if (blocks[j] >= processes[i]) {
+                if (idx == -1 || 
+                   (strcmp(strategy, "Best-Fit") == 0 && blocks[j] < blocks[idx]) ||
+                   (strcmp(strategy, "Worst-Fit") == 0 && blocks[j] > blocks[idx])) {
+                    idx = j;
+                }
+            }
+        }
+        if (idx != -1) {
+            allocation[i] = idx;
+            blocks[idx] -= processes[i];
+        }
+    }
+    for (i = 0; i < n; i++)
+        printf("Process %d -> Block %d\n", i + 1, allocation[i] + 1);
+}
+
+int main() {
+    int blocks[] = {100, 500, 200, 300, 600}, processes[] = {212, 417, 112, 426};
+    int m = 5, n = 4;
+    printf("First-Fit:\n");
+    allocate(blocks, m, processes, n, "First-Fit");
+    return 0;
+}
